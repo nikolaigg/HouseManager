@@ -18,7 +18,7 @@ public class Building {
     private int numOfFloors;
     private int numOfApartments;
 
-    @OneToMany (mappedBy = "building")
+    @OneToMany (mappedBy = "building", cascade = CascadeType.PERSIST)
     private List<Apartment> apartments;
 
     @ManyToOne

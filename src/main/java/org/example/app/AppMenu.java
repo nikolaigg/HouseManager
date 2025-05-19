@@ -13,16 +13,20 @@ public class AppMenu {
 
     public AppMenu() {
         this.loadInitialData = new loadInitialDataCommand();
+        this.create = new createCommand();
     }
 
     public void run(Session session) {
         Scanner scanner = new Scanner(System.in);
 
+        // TO DO
         while (true) {
             System.out.println("\n=== Electronic House Management ===");
             System.out.println("\n--- Menu ---");
             System.out.println("/load -- Load Initial Data");
             System.out.println("/create -- Create an object");
+            System.out.println("/update -- Update an object");
+            System.out.println("/delete -- Delete an object");
             System.out.println("/exit -- Exit application");
             System.out.print("Choose an option: ");
 
@@ -31,9 +35,6 @@ public class AppMenu {
             switch (userChoice) {
                 case "/load":
                     loadInitialData.execute(session);
-                    break;
-                case "/create":
-                    create.execute(session);
                     break;
                 case "/exit":
                     System.out.println("Exiting application...");

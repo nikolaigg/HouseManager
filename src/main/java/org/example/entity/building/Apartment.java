@@ -27,7 +27,7 @@ public class Apartment {
     @OneToOne(mappedBy = "apartmentOwned", cascade = CascadeType.ALL)
     private ApartmentOwner apartmentOwner;
 
-    @OneToMany(mappedBy = "apartment", orphanRemoval = true)
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.PERSIST)
     private List<Resident> residents;
 
     public Apartment() {
@@ -64,12 +64,18 @@ public class Apartment {
         for (Resident resident : residents) {
             if (resident == null) continue;
 
-            if (!this.residents.contains(resident)) {
+            boolean alreadyPresent = this.residents.stream().anyMatch(existing ->
+                    (existing.getPersonId() != null && existing.getPersonId().equals(resident.getPersonId())) ||
+                            (existing == resident)
+            );
+
+            if (!alreadyPresent) {
                 this.residents.add(resident);
                 resident.setApartment(this);
             }
         }
     }
+
 
     public Long getApartmentId() {
         return apartmentId;

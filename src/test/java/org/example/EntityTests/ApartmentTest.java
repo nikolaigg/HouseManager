@@ -1,5 +1,8 @@
 package org.example.EntityTests;
 
+import org.example.configuration.SessionFactoryUtil;
+import org.example.dao.ApartmentDao;
+import org.example.dao.BuildingDao;
 import org.example.entity.building.Apartment;
 import org.example.entity.building.Resident;
 import org.junit.jupiter.api.Test;
@@ -45,4 +48,15 @@ public class ApartmentTest {
 
         assertTrue(apartment.getResidents().isEmpty());
     }
+
+    @Test
+    void addMultipleResidents() {
+        Apartment apartment = new Apartment();
+        Resident resident = new Resident("1", 20);
+        Resident resident2 = new Resident("2", 30);
+        apartment.addResidents(resident,resident2);
+
+
+    }
+
 }

@@ -143,24 +143,10 @@ public class BuildingApartmentLoader {
         building2.addApartments(apartment2_1,apartment2_2,apartment2_3,apartment2_4,apartment2_5);
         building3.addApartments(apartment3_1,apartment3_2,apartment3_3,apartment3_4,apartment3_5);
 
-        // Insert buildings
+        // Insert buildings, apartments, residents and apartment owners (cascade persist)
         buildingDao.insertMany(session,Arrays.asList(building1, building2,building3));
 
-        // Insert apartments
-        apartmentDao.insertMany(session,Arrays.asList(apartment1_1,apartment1_2,apartment1_3,apartment1_4,apartment1_5,
-                apartment2_1,apartment2_2,apartment2_3,apartment2_4, apartment2_5,
-                apartment3_1,apartment3_2,apartment3_3,apartment3_4,apartment3_5));
-
-        // Insert residents
-        residentDao.insertMany(session,Arrays.asList(resident1,resident2,resident3,resident4,resident5,resident6,resident7,resident8,
-                resident9,resident10,resident11,resident12,resident13,resident14,resident15,resident16,resident17,resident18,
-                resident19, resident20, resident21, resident22, resident23, resident24,resident25, resident26, resident27,
-                resident28,resident29, resident30, resident31,resident32,resident33, resident34));
-
-        // Insert apartment owners
-        apartmentOwnerDao.insertMany(session,Arrays.asList(apartmentOwner1, apartmentOwner2,apartmentOwner3, apartmentOwner4, apartmentOwner5,
-                apartmentOwner6, apartmentOwner7, apartmentOwner8, apartmentOwner9, apartmentOwner10, apartmentOwner11,
-                apartmentOwner12, apartmentOwner13, apartmentOwner14, apartmentOwner15));
+//
     }
 
 
