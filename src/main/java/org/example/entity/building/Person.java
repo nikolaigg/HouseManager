@@ -1,6 +1,8 @@
-package org.example.entity;
+package org.example.entity.building;
 
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "person")
@@ -51,4 +53,18 @@ public abstract class Person {
                 ", age=" + age +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Person other)) return false;
+
+        return Objects.equals(this.getPersonId(), other.getPersonId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPersonId());
+    }
+
 }

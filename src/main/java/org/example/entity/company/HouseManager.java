@@ -1,19 +1,23 @@
-package org.example.entity;
+package org.example.entity.company;
 
 import jakarta.persistence.*;
+import org.example.entity.building.Person;
+import org.example.entity.building.Resident;
+import org.example.entity.building.Building;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "house_manager")
-public class HouseManager extends Person{
+public class HouseManager extends Person {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 
     @OneToMany(mappedBy = "houseManager")
-    private ArrayList<Building> buildingsManaged;
+    private List<Building> buildingsManaged;
     private int numOfBuildingsManaged;
 
     public HouseManager() {
@@ -37,11 +41,11 @@ public class HouseManager extends Person{
         this.company = company;
     }
 
-    public ArrayList<Building> getBuildingsManaged() {
+    public List<Building> getBuildingsManaged() {
         return buildingsManaged;
     }
 
-    public void setBuildingsManaged(ArrayList<Building> buildingsManaged) {
+    public void setBuildingsManaged(List<Building> buildingsManaged) {
         this.buildingsManaged = buildingsManaged;
     }
 
@@ -56,9 +60,10 @@ public class HouseManager extends Person{
     @Override
     public String toString() {
         return "HouseManager{" +
-                "company=" + company +
-                ", buildingsManaged=" + buildingsManaged +
+                "company=" + company.getCompanyName() +
                 ", numOfBuildingsManaged=" + numOfBuildingsManaged +
                 '}';
     }
+
+
 }

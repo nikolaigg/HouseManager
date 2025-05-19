@@ -1,9 +1,10 @@
-package org.example.entity;
+package org.example.entity.building;
 
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "apartment")
@@ -26,11 +27,11 @@ public class Apartment {
     @OneToOne(mappedBy = "apartmentOwned", cascade = CascadeType.ALL)
     private ApartmentOwner apartmentOwner;
 
-    @OneToMany(mappedBy = "apartment")
-    private ArrayList<Resident> residents;
+    @OneToMany(mappedBy = "apartment", orphanRemoval = true)
+    private List<Resident> residents;
 
     public Apartment() {
-
+        this.residents = new ArrayList<>();
     }
 
     public Apartment(Building building, int floorNumber, int apartmentNumber, BigDecimal apartmentArea, boolean hasPet) {
@@ -56,6 +57,20 @@ public class Apartment {
         }
         return total;
     }
+
+    public void addResidents(Resident... residents) {
+        if (residents == null) return;
+
+        for (Resident resident : residents) {
+            if (resident == null) continue;
+
+            if (!this.residents.contains(resident)) {
+                this.residents.add(resident);
+                resident.setApartment(this);
+            }
+        }
+    }
+
     public Long getApartmentId() {
         return apartmentId;
     }
@@ -108,11 +123,11 @@ public class Apartment {
         this.apartmentOwner = apartmentOwner;
     }
 
-    public ArrayList<Resident> getResidents() {
+    public List<Resident> getResidents() {
         return residents;
     }
 
-    public void setResidents(ArrayList<Resident> residents) {
+    public void setResidents(List<Resident> residents) {
         this.residents = residents;
     }
 
@@ -120,13 +135,29 @@ public class Apartment {
     public String toString() {
         return "Apartment{" +
                 "apartmentId=" + apartmentId +
-                ", building=" + building +
+                ", building=" + building.getAddress() +
                 ", floorNumber=" + floorNumber +
                 ", apartmentNumber=" + apartmentNumber +
                 ", apartmentArea=" + apartmentArea +
                 ", hasPet=" + hasPet +
-                ", apartmentOwner=" + apartmentOwner +
-                ", residents=" + residents +
+                ", apartmentOwner=" + apartmentOwner.getName() +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Apartment apartment = (Apartment) o;
+
+        return apartmentId != null && apartmentId.equals(apartment.apartmentId);
+    }
+
+    @Override
+    public int hashCode() {
+        return apartmentId != null ? apartmentId.hashCode() : 0;
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package org.example.entity;
+package org.example.entity.building;
 
 import jakarta.persistence.*;
 
@@ -16,6 +16,7 @@ public class ApartmentOwner extends Person {
     public ApartmentOwner(String name, int age, Apartment apartmentOwned) {
         super(name, age);
         this.apartmentOwned = apartmentOwned;
+        apartmentOwned.setApartmentOwner(this);
     }
     public ApartmentOwner(Resident resident, Apartment apartmentOwned) {
         this(resident.getName(), resident.getAge(), apartmentOwned);
@@ -32,7 +33,7 @@ public class ApartmentOwner extends Person {
     @Override
     public String toString() {
         return "ApartmentOwner{" +
-                "apartmentOwned=" + apartmentOwned +
+                "apartmentOwned=" + apartmentOwned.getApartmentId() +
                 '}';
     }
 }

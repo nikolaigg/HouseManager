@@ -1,7 +1,7 @@
 package org.example.exceptions;
 
-public class HouseManagerNotInCompany extends RuntimeException {
-    public HouseManagerNotInCompany(String message) {
+public class HouseManagerNotInCompanyException extends RuntimeException {
+    public HouseManagerNotInCompanyException(String message) {
         super(message);
     }
 }

@@ -1,8 +1,10 @@
-package org.example.entity;
+package org.example.entity.building;
 
 import jakarta.persistence.*;
+import org.example.entity.company.HouseManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "building")
@@ -17,14 +19,14 @@ public class Building {
     private int numOfApartments;
 
     @OneToMany (mappedBy = "building")
-    private ArrayList<Apartment> apartments;
+    private List<Apartment> apartments;
 
     @ManyToOne
     @JoinColumn(name = "house_manager_id")
     private HouseManager houseManager;
 
     public Building() {
-
+        this.apartments = new ArrayList<>();
     }
 
     public Building(String address, int numOfFloors, int numOfApartments) {
@@ -33,6 +35,18 @@ public class Building {
         this.numOfApartments = numOfApartments;
         this.apartments = new ArrayList<>();
         this.houseManager = null;
+    }
+    public void addApartments(Apartment... apartments) {
+        if (apartments == null) return;
+
+        for (Apartment apartment : apartments) {
+            if (apartment == null) continue;
+
+            if (!this.apartments.contains(apartment)) {
+                this.apartments.add(apartment);
+                apartment.setBuilding(this);
+            }
+        }
     }
 
     public Long getBuildingId() {
@@ -63,11 +77,11 @@ public class Building {
         this.numOfApartments = numOfApartments;
     }
 
-    public ArrayList<Apartment> getApartments() {
+    public List<Apartment> getApartments() {
         return apartments;
     }
 
-    public void setApartments(ArrayList<Apartment> apartments) {
+    public void setApartments(List<Apartment> apartments) {
         this.apartments = apartments;
     }
 
@@ -90,4 +104,20 @@ public class Building {
                 ", houseManager=" + houseManager +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Building building = (Building) o;
+
+        return buildingId != null && buildingId.equals(building.buildingId);
+    }
+
+    @Override
+    public int hashCode() {
+        return buildingId != null ? buildingId.hashCode() : 0;
+    }
+
 }

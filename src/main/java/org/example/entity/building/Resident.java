@@ -1,4 +1,4 @@
-package org.example.entity;
+package org.example.entity.building;
 
 import jakarta.persistence.*;
 
@@ -29,7 +29,11 @@ public class Resident extends Person {
     @Override
     public String toString() {
         return "Resident{" +
-                "apartment=" + apartment +
+                "name - " + this.getName() +
+                " age - " + this.getAge() +
+                //"apartment=" + apartment.getBuilding().getAddress() +
                 '}';
     }
+
+
 }

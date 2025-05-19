@@ -1,8 +1,11 @@
-package org.example.entity;
+package org.example.entity.company;
 
 import jakarta.persistence.*;
+import org.example.entity.building.Building;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table (name = "company")
@@ -12,39 +15,76 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long companyId;
 
-    private int profit;
+    @Column(name = "company_name")
+    private String companyName;
+    private BigDecimal income;
 
     @OneToMany(mappedBy = "company")
-    private ArrayList<HouseManager> houseManagers;
+    private List<HouseManager> houseManagers;
 
+    @Transient
     private ArrayList<Building> buildings;
 
     @Transient
     private TaxService taxService;
+    @Transient
+    private ContractManager contractManager;
 
     public Company() {
-        this.profit = 0;
+    }
+
+    public Company(String companyName) {
+        this.companyName = companyName;
+        this.income = BigDecimal.ZERO;
         this.houseManagers = new ArrayList<>();
         this.buildings = new ArrayList<>();
     }
+
+    @PostLoad
+    private void initContractManager() {
+        this.taxService = new TaxService(BigDecimal.valueOf(10),BigDecimal.valueOf(10),BigDecimal.valueOf(10),BigDecimal.valueOf(10));
+        this.contractManager = new ContractManager();
+    }
+    public HouseManager getLeastBusyManager() {
+        if (houseManagers == null || houseManagers.isEmpty()) {
+            return null;
+        }
+
+        HouseManager leastBusyManager = houseManagers.get(0);
+        for(HouseManager houseManager : houseManagers) {
+            if(leastBusyManager.getNumOfBuildingsManaged() > houseManager.getNumOfBuildingsManaged()) {
+                leastBusyManager = houseManager;
+            }
+        }
+        return leastBusyManager;
+    }
+
 
     public Long getCompanyId() {
         return companyId;
     }
 
-    public int getProfit() {
-        return profit;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setProfit(int profit) {
-        this.profit = profit;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
-    public ArrayList<HouseManager> getHouseManagers() {
+    public BigDecimal getIncome() {
+        return income;
+    }
+
+    public void setIncome(BigDecimal income) {
+        this.income = income;
+    }
+
+    public List<HouseManager> getHouseManagers() {
         return houseManagers;
     }
 
-    public void setHouseManagers(ArrayList<HouseManager> houseManagers) {
+    public void setHouseManagers(List<HouseManager> houseManagers) {
         this.houseManagers = houseManagers;
     }
 
@@ -56,13 +96,43 @@ public class Company {
         this.buildings = buildings;
     }
 
+    public TaxService getTaxService() {
+        return taxService;
+    }
+
+    public void setTaxService(TaxService taxService) {
+        this.taxService = taxService;
+    }
+
+    public ContractManager getContractManager() {
+        return contractManager;
+    }
+
+    public void setContractManager(ContractManager contractManager) {
+        this.contractManager = contractManager;
+    }
+
     @Override
     public String toString() {
         return "Company{" +
                 "companyId=" + companyId +
-                ", profit=" + profit +
-                ", houseManagers=" + houseManagers +
-                ", buildings=" + buildings +
+                ", income=" + income +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Company company = (Company) o;
+
+        return companyId != null && companyId.equals(company.companyId);
+    }
+
+    @Override
+    public int hashCode() {
+        return companyId != null ? companyId.hashCode() : 0;
+    }
+
 }
